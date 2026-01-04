@@ -1,0 +1,36 @@
+<div class="treasure-launcher">
+
+  <!-- Spiaggia all'inizio -->
+  <img src="images/beach.png" alt="spiaggia">
+
+  <!-- Container percorso -->
+  <div class="treasure-path-container">
+    <svg #treasureSvg
+      id="treasureSvg"
+      viewBox="0 0 100 50"
+      preserveAspectRatio="none"
+    >
+      <!-- Path normalizzato -->
+      <path #sinPath
+        id="sinPath"
+        d="M0 25 C 20 5, 80 45, 100 25"
+        stroke="black"
+        stroke-width="2"
+        fill="none"
+        stroke-dasharray="2 3"
+      />
+
+
+      <!-- Barca -->
+      <image #boat
+        id="boat"
+        href="images/boat.png"
+        width="15"
+        (load)="onBoatLoad()"
+      />
+    </svg>
+  </div>
+
+  <!-- Tesoro alla fine -->
+  <img src="images/treasure.png" alt="tesoro">
+</div>

@@ -1,0 +1,37 @@
+.treasure-launcher {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 90px;
+  background-color: #a0e0ff;
+  padding: 0 6px;
+  gap: 4px; /* minimo indispensabile */
+}
+
+.treasure-launcher img {
+  width: 15%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.treasure-path-container {
+  flex: 1 1 auto;
+  height: 100%;
+  min-width: 0; /* IMPORTANTISSIMO */
+}
+
+.treasure-path-container svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+
+#boat {
+  cursor: grab;
+  transition: transform 0.1s ease;
+}
+
+#boat.dragging {
+  cursor: grabbing;
+}
