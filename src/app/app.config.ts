@@ -9,3 +9,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes)
   ]
 };
+
+export interface RuntimeConfig {
+  API_URL: string;
+}
+
