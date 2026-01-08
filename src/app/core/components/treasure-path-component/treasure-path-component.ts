@@ -1,8 +1,13 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef,ViewChild} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 
 @Component({
   selector: 'app-treasure-path-component',
-  imports: [],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './treasure-path-component.html',
   styleUrl: './treasure-path-component.css',
 })
@@ -16,8 +21,6 @@ export class TreasurePathComponent implements AfterViewInit {
   private svg!: SVGSVGElement;
   private pathLength!: number;
   private readonly RESET_PROGRESS = 0.5;
-
-  @Output() openModal = new EventEmitter<void>(); // Evento verso il genitore
 
   ngAfterViewInit() {
     this.boat = this.boatRef.nativeElement;
@@ -62,7 +65,6 @@ export class TreasurePathComponent implements AfterViewInit {
       // Raggiunta fine → emetti evento
       if (progress >= 1 - boatOffset) {
         isDragging = false;
-        this.openModal.emit(); // ✅ notifica al genitore
         this.updateBoatPosition(this.RESET_PROGRESS); // reset a metà
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);

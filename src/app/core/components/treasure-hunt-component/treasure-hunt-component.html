@@ -1,57 +1,14 @@
-<app-treasure-path-component (openModal)="openNewTreasureModal()" ></app-treasure-path-component>
+<app-treasure-path-component></app-treasure-path-component>
 
 <div class="container mt-5">
   <ul class="row list-unstyled g-4">
     @for (treasure of treasureHunts(); track treasure.id) {
       <li class="col-sm-6 col-md-4 mb-4">
-        <div class="card h-100 shadow border-0 rounded-4 overflow-hidden hover-scale"
-             [style.background-image]="'url(' + (treasure.theme | themeImage) + ')'"
-             style="background-size: cover; background-position: center; transition: transform 0.3s;"
-             id="card-{{ treasure.id }}"> <!-- assegniamo un id unico alla card -->
-
-          <!-- Overlay semi-trasparente -->
-          <div class="card-overlay d-flex flex-column justify-content-between h-100 p-3 bg-dark bg-opacity-25">
-
-            <!-- Header -->
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h5 class="card-title text-white mb-0">{{ treasure.theme }}</h5>
-            </div>
-
-            <!-- Body -->
-            <div class="card-body p-0">
-              <p class="card-text fst-italic text-white bg-dark bg-opacity-50 p-2 rounded">
-                {{ treasure.hint }}
-              </p>
-
-              <ul
-                cdkDropList
-                [cdkDropListData]="treasure.clues"
-                (cdkDropListDropped)="dropClue($event, treasure)"
-                class="list-group rounded-4 overflow-hidden mt-3 clue-glass-ultra"
-              >
-
-                @for (clue of treasure.clues; track clue.id) {
-                  <li
-                    class="list-group-item clue-item-ultra"
-                    cdkDrag
-                    cdkDragBoundary="#card-{{ treasure.id }}"
-                    >
-                  {{ clue.text }}
-                  </li>
-                }
-
-                @empty {
-                  <li class="list-group-item text-muted fst-italic text-center">
-                    Nessun indizio disponibile
-                  </li>
-                }
-
-              </ul>
-
-            </div>
-
-          </div>
-        </div>
+        <app-treasure-card-component
+          [treasure]="treasure"
+          (clueDropped)="updateTreasure($event)"
+          (treasureDeleted)="deleteTreasure($event)">
+        </app-treasure-card-component>
       </li>
     }
     @empty {
@@ -59,64 +16,10 @@
         <div class="alert alert-warning text-center">Nessuna caccia al tesoro disponibile.</div>
       </li>
     }
-    <!-- Card finale per aggiungere nuova caccia -->
     <li class="col-sm-6 col-md-4 mb-4">
-      <div
-        class="card h-100 shadow border-0 rounded-4 overflow-hidden d-flex justify-content-center align-items-center hover-scale"
-        style="cursor: pointer; background-color: #f0f0f0;"
-        (click)="openNewTreasureModal()"
-      >
-        <div class="d-flex flex-column justify-content-center align-items-center text-center p-4">
-          <i class="bi bi-plus-circle display-3 text-primary mb-3"></i>
-          <h5 class="card-title text-dark">Crea nuova caccia</h5>
-          <p class="card-text text-muted fst-italic">Clicca per aprire il modulo di creazione</p>
-        </div>
-      </div>
+      <app-add-treasure-card
+        (treasureCreated)="addTreasure($event)"
+      ></app-add-treasure-card>
     </li>
   </ul>
-</div>
-
-
-
-<!-- Modal per creare una caccia al tesoro-->
-<div
-  class="modal fade"
-  id="newTreasureModal"
-  tabindex="-1"
-  aria-labelledby="newTreasureModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newTreasureModalLabel">
-          Crea una nuova caccia al tesoro
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="theme" class="form-label">Tema</label>
-            <input type="text" class="form-control" id="theme" />
-          </div>
-          <div class="mb-3">
-            <label for="hint" class="form-label">Indizio iniziale</label>
-            <input type="text" class="form-control" id="hint" />
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Annulla
-        </button>
-        <button type="button" class="btn btn-primary">Crea</button>
-      </div>
-    </div>
-  </div>
 </div>

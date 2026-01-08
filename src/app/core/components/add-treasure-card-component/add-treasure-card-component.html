@@ -1,0 +1,35 @@
+<div
+  class="card h-100 add-card shadow border-0 rounded-4 d-flex justify-content-center align-items-center"
+  (click)="!isEditing && startEditing()"
+  [style.backgroundImage]="'url(images/default.jpg)'"
+  style="background-size: cover; background-position: center;"
+>
+  <div
+    class="text-center p-4"
+    style="background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px); border-radius: 1rem;"
+  >
+    @if (!isEditing){
+      <i class="bi bi-plus-lg add-icon mb-3"></i>
+      <h5 class="fw-semibold mb-1">Crea nuova caccia</h5>
+      <p class="small fst-italic mb-0">Aggiungi una nuova avventura</p>
+    } @else {
+      <select class="form-select mb-2" [(ngModel)]="newTreasureTheme">
+        @for(theme of treasureThemes ; track theme){
+          <option value="{{theme}}">{{theme}}</option>
+        }
+      </select>
+
+      <input
+        type="text"
+        class="form-control mb-2"
+        placeholder="Inserisci hint"
+        [(ngModel)]="newTreasureHint"
+      />
+
+      <div class="d-flex justify-content-center gap-2">
+        <button class="btn btn-sm btn-success" (click)="saveTreasure($event)">Salva</button>
+        <button class="btn btn-sm btn-secondary" (click)="cancelEditing($event)">Annulla</button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,30 +1,31 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {TreasureHunt} from '../../model/TreasureHunt';
 import {TreasureHuntService} from '../../services/treasure-hunt.service';
-import {ThemeImagePipe} from '../../pipes/theme-image-pipe';
-import {CdkDrag, CdkDragDrop, CdkDropList, DragDropModule, moveItemInArray} from '@angular/cdk/drag-drop';
-import {ClueService} from '../../services/clue-service';
+import {CdkDragDrop, DragDropModule} from '@angular/cdk/drag-drop';
 import {Clue} from '../../model/Clue';
 import {TreasurePathComponent} from '../treasure-path-component/treasure-path-component';
-declare var bootstrap: any;
+
+import {FormsModule} from '@angular/forms';
+import {AddTreasureCardComponent} from '../add-treasure-card-component/add-treasure-card-component';
+import {TreasureCardComponent} from '../treasure-card-component/treasure-card-component';
 @Component({
   selector: 'app-treasure-hunt-component',
   imports: [
-    ThemeImagePipe,
     DragDropModule,
-    CdkDropList,
-    CdkDrag,
-    TreasurePathComponent
+    TreasurePathComponent,
+    FormsModule,
+    AddTreasureCardComponent,
+    TreasureCardComponent
   ],
   templateUrl: './treasure-hunt-component.html',
   styleUrl: './treasure-hunt-component.css',
 })
 export class TreasureHuntComponent implements OnInit {
-  treasureHunts = signal<TreasureHunt[]>([]);
 
-  constructor(private treasureHuntService: TreasureHuntService,
-              private clueService: ClueService,) {
+  treasureHunts = signal<TreasureHunt[]>([]);
+  constructor(private treasureHuntService: TreasureHuntService) {
   }
+
   ngOnInit() {
     this.treasureHuntService.getAll().subscribe({
       next: (data: TreasureHunt[]) => {
@@ -35,55 +36,20 @@ export class TreasureHuntComponent implements OnInit {
       }
     })
   }
+  addTreasure(newTreasure: TreasureHunt) {
+    this.treasureHunts.update(list => [...list, newTreasure]);
+  }
 
-  protected dropClue(
-    event: CdkDragDrop<Clue[]>,
-    treasure: TreasureHunt
-  ) {
-    if (event.previousIndex === event.currentIndex) {
-      return;
-    }
-
-    // 1️⃣ Cloniamo l'array per non mutare direttamente
-    const reorderedClues = [...treasure.clues];
-
-    // 2️⃣ Riordiniamo
-    moveItemInArray(
-      reorderedClues,
-      event.previousIndex,
-      event.currentIndex
+  updateTreasure(updated: { treasure: TreasureHunt; event: CdkDragDrop<Clue[]> }) {
+    const { treasure } = updated;
+    this.treasureHunts.update(list =>
+      list.map(t => (t.id === treasure.id ? treasure : t))
     );
-
-    // 3️⃣ Ricalcoliamo gli step
-    const updatedClue: Clue = {
-      ...reorderedClues[event.currentIndex],
-      step: event.currentIndex + 1,
-    };
-
-    // 4️⃣ Chiamata backend (una sola clue)
-    this.clueService
-      .update(treasure.id, updatedClue.id, updatedClue)
-      .subscribe({
-        next: (updatedTreasure: TreasureHunt) => {
-
-          // 5️⃣ Aggiorniamo SOLO quella treasure nel signal
-          this.treasureHunts.update((hunts) =>
-            hunts.map((h) =>
-              h.id === updatedTreasure.id ? updatedTreasure : h
-            )
-          );
-          console.log(this.treasureHunts());
-        },
-        error: (err) => {
-          console.error('Errore reorder clue', err);
-        },
-      });
-  }
-  openNewTreasureModal(): void {
-    const modalEl = document.getElementById('newTreasureModal');
-    if (!modalEl) return;
-    const modal = new bootstrap.Modal(modalEl);
-    modal.show();
   }
 
+  deleteTreasure($event: TreasureHunt) {
+    this.treasureHunts.update(list =>
+      list.filter(t => t.id !== $event.id) // rimuove la caccia con quell'id
+    );
+  }
 }

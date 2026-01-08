@@ -1,57 +1,15 @@
 :host {
-  display: block;      /* Assicurati che il componente sia un blocco */
-  background-color: #dc861e; /* Sfondo giallo */
+  display: block;
+  background-color: #e1922b;
+  padding: 2rem;
+  min-height: 100vh;
 }
 
-/* ===== LISTA VETRO ===== */
-.clue-glass-ultra {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-/* ===== ITEM ===== */
-.clue-item-ultra {
-  background: rgba(255, 255, 255, 0.18);
-  border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  color: #111;
-  padding: 0.65rem 0.9rem;
-  font-weight: 500;
-
-  cursor: grab;
-  user-select: none;
-  will-change: transform;
-}
-
-/* hover SOLO quando NON stai trascinando */
-.clue-item-ultra:not(.cdk-drag-dragging):hover {
-  transform: translateY(-1px);
-}
-
-/* ===== DRAG ===== */
-
-/* pugno chiuso OVUNQUE */
-body.cdk-drag-dragging {
-  cursor: grabbing !important;
-}
-
-/* elemento preso */
-.cdk-drag-preview {
-  cursor: grabbing !important;
-  backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.35);
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-}
-
-/* spazio lasciato */
-.cdk-drag-placeholder {
-  opacity: 0.25;
-}
-
-/* blocca transizioni durante il drag */
-.cdk-drag-dragging * {
-  transition: none !important;
+ul.treasure-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }

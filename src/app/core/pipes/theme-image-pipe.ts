@@ -1,17 +1,28 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import {TreasureTheme} from '../model/TreasureTheme';
+
 
 @Pipe({
-  name: 'themeImage'
+  name: 'themeImage',
 })
 export class ThemeImagePipe implements PipeTransform {
 
-  transform(theme: string): string {
-    switch (theme?.toUpperCase()) {
-      case 'PIRATES': return 'images/pirates.jpg';
-      case 'FANTASY': return 'images/fantasy.jpg';
-      case 'MYSTERY': return 'images/mystery.jpg';
-      case 'HISTORY': return 'images/history.jpg';
-      default: return 'images/default.jpg';
+  transform(theme: TreasureTheme | null | undefined): string {
+    switch (theme) {
+      case TreasureTheme.PIRATES:
+        return 'images/pirates.jpg';
+
+      case TreasureTheme.FANTASY:
+        return 'images/fantasy.jpg';
+
+      case TreasureTheme.MYSTERY:
+        return 'images/mystery.jpg';
+
+      case TreasureTheme.HISTORY:
+        return 'images/history.jpg';
+
+      default:
+        return 'images/default.jpg';
     }
   }
 }
