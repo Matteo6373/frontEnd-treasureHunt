@@ -1,6 +1,6 @@
 export interface Clue{
-  id: string;
-  step: number;
+  id?: string;
+  step?: number;
   text: string;
   solution: string;
 }

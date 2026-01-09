@@ -21,7 +21,6 @@ import {TreasureCardComponent} from '../treasure-card-component/treasure-card-co
   styleUrl: './treasure-hunt-component.css',
 })
 export class TreasureHuntComponent implements OnInit {
-
   treasureHunts = signal<TreasureHunt[]>([]);
   constructor(private treasureHuntService: TreasureHuntService) {
   }
@@ -40,8 +39,7 @@ export class TreasureHuntComponent implements OnInit {
     this.treasureHunts.update(list => [...list, newTreasure]);
   }
 
-  updateTreasure(updated: { treasure: TreasureHunt; event: CdkDragDrop<Clue[]> }) {
-    const { treasure } = updated;
+  updateTreasure(treasure: TreasureHunt) {
     this.treasureHunts.update(list =>
       list.map(t => (t.id === treasure.id ? treasure : t))
     );
@@ -49,7 +47,7 @@ export class TreasureHuntComponent implements OnInit {
 
   deleteTreasure($event: TreasureHunt) {
     this.treasureHunts.update(list =>
-      list.filter(t => t.id !== $event.id) // rimuove la caccia con quell'id
+      list.filter(t => t.id !== $event.id)
     );
   }
 }

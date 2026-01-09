@@ -17,18 +17,26 @@
         {{ treasure.hint }}
       </p>
 
-      <!-- Pulsanti per aggiungere, generare o cancellare indizi -->
+      <!-- Pulsanti per generare o cancellare -->
       <div class="d-flex gap-2 mt-2 mb-3">
-        <button class="btn btn-sm btn-primary" (click)="createClue(treasure)">
-          Crea Indizio
-        </button>
-        <button class="btn btn-sm btn-success" (click)="generateCluesAI(treasure)">
-          Genera Indizi AI
-        </button>
-        <button class="btn btn-sm btn-danger" (click)="deleteTreasure(treasure)">
+        @if (!loading()){
+          <app-button-genererate-ai
+            [treasure]="treasure"
+            (generate)="generateCluesAI($event.treasure, $event.count)" >
+
+          </app-button-genererate-ai>
+        } @else {
+          <div class="d-flex align-items-center gap-2 p-2 bg-light rounded shadow-sm">
+            <div class="spinner-border text-primary" role="status" style="width:1.5rem; height:1.5rem;">
+              <span class="visually-hidden">Caricamento...</span>
+            </div>
+            <span class="fw-semibold text-primary">Generazione in corso...</span>
+          </div>
+        }
+        <button class="btn btn-sm btn-danger"
+                (click)="deleteTreasure(treasure)">
           Cancella Caccia
-        </button>
-      </div>
+        </button> </div>
 
 
       <ul
@@ -37,6 +45,12 @@
         (cdkDropListDropped)="dropClue($event)"
         class="list-group rounded-4 overflow-hidden mt-3 clue-glass-ultra"
       >
+        <li class="list-group-item bg-dark bg-opacity-50 border-0">
+          <app-add-clue-component
+            [treasure]="treasure"
+            (add)="addClue($event)">
+          </app-add-clue-component>
+        </li>
         @for (clue of treasure.clues; track clue.id) {
           <li
             class="list-group-item clue-item-ultra"
