@@ -57,61 +57,13 @@
             cdkDrag
             cdkDragBoundary="#card-{{ treasure.id }}"
           >
-            <div
-              class="clue-flip-container"
-              [class.flipped]="clue.showSolution"
-              (click)="clue.showSolution = !clue.showSolution"
-            >
-
-              <!-- FRONTE (INDIZIO) -->
-              <div class="clue-face clue-front">
-                <div class="clue-glass">
-                  <div class="clue-actions">
-                    <button class="clue-btn edit" (click)="editClue(clue); $event.stopPropagation()">✏️</button>
-                    <button class="clue-btn delete" (click)="deleteClue(clue); $event.stopPropagation()">🗑️</button>
-                  </div>
-                  <span class="clue-label">Indizio</span>
-                  @if(!clue.editingText){
-                    <p>{{ clue.text }}</p>
-                  } @else {
-                    <textarea
-                      id="clue-textarea-{{clue.id}}"
-                      class="clue-editor"
-                      [(ngModel)]="clue.text"
-                      (click)="$event.stopPropagation()"
-                      (blur)="saveClue(clue); clue.editingText = false;"
-                      (keydown.enter)="saveClue(clue); $event.preventDefault(); clue.editingText = false;"
-                    ></textarea>
-                  }
-                </div>
-              </div>
-
-              <!-- RETRO (SOLUZIONE) -->
-              <div class="clue-face clue-back">
-                <div class="solution-glass">
-                  <div class="clue-actions">
-                    <button class="clue-btn edit" (click)="editClue(clue); $event.stopPropagation()">✏️</button>
-                    <button class="clue-btn delete" (click)="deleteClue(clue); $event.stopPropagation()">🗑️</button>
-                  </div>
-                  <span class="clue-label text-warning">Soluzione</span>
-                  @if (!clue.editingSolution){
-                    <p>{{ clue.solution }}</p>
-                  } @else {
-                    <textarea
-                      id="clue-solution-{{clue.id}}"
-                      class="clue-editor"
-                      [(ngModel)]="clue.solution"
-                      (click)="$event.stopPropagation()"
-                      (blur)="saveClue(clue); clue.editingSolution = false;"
-                      (keydown.enter)="saveClue(clue); $event.preventDefault(); clue.editingSolution = false; "
-                    ></textarea>
-                  }
-                </div>
-              </div>
-
-            </div>
+            <app-clue-card-component
+              [clue]="clue"
+              [treasure]="treasure"
+              (clueUpdated)="saveClue($event)"
+              (clueDeleted)="deleteClue($event)"
+            ></app-clue-card-component>
           </li>
-
         }
         @empty {
           <li class="list-group-item text-muted fst-italic text-center">

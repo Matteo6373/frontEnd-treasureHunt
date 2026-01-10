@@ -9,6 +9,7 @@ import {AddClueComponent} from '../add-clue-component/add-clue-component';
 import {ButtonGenererateAi} from '../button-genererate-ai/button-genererate-ai';
 import {InputAi} from '../../model/InputAi';
 import {FormsModule} from '@angular/forms';
+import {ClueCardComponent} from '../clue-card-component/clue-card-component';
 
 @Component({
   selector: 'app-treasure-card-component',
@@ -18,7 +19,8 @@ import {FormsModule} from '@angular/forms';
     CdkDrag,
     AddClueComponent,
     ButtonGenererateAi,
-    FormsModule
+    FormsModule,
+    ClueCardComponent
   ],
   templateUrl: './treasure-card-component.html',
   styleUrl: './treasure-card-component.css',
@@ -103,39 +105,19 @@ export class TreasureCardComponent {
       }
     })
   }
-
-  protected editClue(clue: Clue) {
-    const field: 'text' | 'solution' = clue.showSolution ? 'solution' : 'text';
-
-    if(field === 'text') {
-      clue.editingText = true;
-    } else {
-      clue.editingSolution = true;
-    }
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => {
-      const textarea = document.querySelector<HTMLTextAreaElement>(
-        field === 'text'
-          ? `#clue-textarea-${clue.id}`
-          : `#clue-solution-${clue.id}`
-      );
-      if(textarea){
-        textarea.focus();
-        textarea.select();
-        // Auto-resize
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
-        // Scroll fino alla textarea
-        textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 0);
-  }
   protected deleteClue(clue: Clue) {
-
+    if (!this.treasure.id || !clue.id) return;
+    this.clueService.delete(this.treasure.id, clue.id).subscribe({
+      next: (updatedTreasure: TreasureHunt) => {
+        this.treasureUpdate.emit(updatedTreasure);
+      },
+      error: (err) => {
+        console.error('Errore delete clue', err);
+        alert('Errore durante la cancellazione dell’indizio');
+      }
+    });
   }
   protected saveClue(clue: Clue) {
-    clue.editingText = false;
-    clue.editingSolution = false;
     const payload: Clue = {
       step: clue.step,
       text: clue.text,
