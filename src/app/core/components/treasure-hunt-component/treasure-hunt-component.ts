@@ -41,9 +41,21 @@ export class TreasureHuntComponent implements OnInit {
 
   updateTreasure(treasure: TreasureHunt) {
     this.treasureHunts.update(list =>
-      list.map(t => (t.id === treasure.id ? treasure : t))
+      list.map(t => {
+        if (t.id !== treasure.id) return t;
+        const oldTreasure = t;
+        const updatedClues = treasure.clues.map(clueFromBackend => {
+          const oldClue = oldTreasure.clues.find(c => c.id === clueFromBackend.id);
+          if (oldClue) {
+            return { ...clueFromBackend, showSolution: oldClue.showSolution };
+          }
+          return clueFromBackend;
+        });
+        return { ...treasure, clues: updatedClues };
+      })
     );
   }
+
 
   deleteTreasure($event: TreasureHunt) {
     this.treasureHunts.update(list =>

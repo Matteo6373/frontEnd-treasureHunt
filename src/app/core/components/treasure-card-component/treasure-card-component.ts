@@ -8,6 +8,7 @@ import {TreasureHuntService} from '../../services/treasure-hunt.service';
 import {AddClueComponent} from '../add-clue-component/add-clue-component';
 import {ButtonGenererateAi} from '../button-genererate-ai/button-genererate-ai';
 import {InputAi} from '../../model/InputAi';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-treasure-card-component',
@@ -16,7 +17,8 @@ import {InputAi} from '../../model/InputAi';
     CdkDropList,
     CdkDrag,
     AddClueComponent,
-    ButtonGenererateAi
+    ButtonGenererateAi,
+    FormsModule
   ],
   templateUrl: './treasure-card-component.html',
   styleUrl: './treasure-card-component.css',
@@ -100,6 +102,55 @@ export class TreasureCardComponent {
         console.error(`Errore creating clue`, err);
       }
     })
+  }
+
+  protected editClue(clue: Clue) {
+    const field: 'text' | 'solution' = clue.showSolution ? 'solution' : 'text';
+
+    if(field === 'text') {
+      clue.editingText = true;
+    } else {
+      clue.editingSolution = true;
+    }
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+      const textarea = document.querySelector<HTMLTextAreaElement>(
+        field === 'text'
+          ? `#clue-textarea-${clue.id}`
+          : `#clue-solution-${clue.id}`
+      );
+      if(textarea){
+        textarea.focus();
+        textarea.select();
+        // Auto-resize
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+        // Scroll fino alla textarea
+        textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 0);
+  }
+  protected deleteClue(clue: Clue) {
+
+  }
+  protected saveClue(clue: Clue) {
+    clue.editingText = false;
+    clue.editingSolution = false;
+    const payload: Clue = {
+      step: clue.step,
+      text: clue.text,
+      solution: clue.solution
+    };
+
+    this.clueService.update(this.treasure.id!, clue.id!, payload).subscribe({
+      next: (data: TreasureHunt) => {
+        this.treasureUpdate.emit(data);
+      },
+      error: (err) => {
+        console.error('Errore update clue', err);
+        alert('Errore durante il salvataggio dell’indizio/soluzione');
+      }
+    });
   }
 
 }
