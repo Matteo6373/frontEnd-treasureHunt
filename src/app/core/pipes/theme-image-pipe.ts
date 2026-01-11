@@ -6,7 +6,6 @@ import {TreasureTheme} from '../model/TreasureTheme';
   name: 'themeImage',
 })
 export class ThemeImagePipe implements PipeTransform {
-
   transform(theme: TreasureTheme | null | undefined): string {
     switch (theme) {
       case TreasureTheme.PIRATES:

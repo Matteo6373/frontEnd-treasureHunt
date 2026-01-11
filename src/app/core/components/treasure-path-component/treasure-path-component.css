@@ -5,7 +5,7 @@
   height: 90px;
   background-color: #a0e0ff;
   padding: 0 6px;
-  gap: 4px; /* minimo indispensabile */
+  gap: 4px;
 }
 
 .treasure-launcher img {
@@ -17,7 +17,7 @@
 .treasure-path-container {
   flex: 1 1 auto;
   height: 100%;
-  min-width: 0; /* IMPORTANTISSIMO */
+  min-width: 0;
 }
 
 .treasure-path-container svg {
@@ -30,8 +30,12 @@
 #boat {
   cursor: grab;
   transition: transform 0.1s ease;
+  touch-action: none;
 }
 
 #boat.dragging {
   cursor: grabbing;
+}
+svg {
+  touch-action: none;
 }

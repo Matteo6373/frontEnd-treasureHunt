@@ -42,21 +42,24 @@ export class TreasureCardComponent {
     const reorderedClues = [...this.treasure.clues];
     moveItemInArray(reorderedClues, event.previousIndex, event.currentIndex);
 
-    const movedClue: Clue = {
-      ...reorderedClues[event.currentIndex],
-      step: event.currentIndex + 1
-    };
+    const movedClue = reorderedClues[event.currentIndex];
 
     if (movedClue.id) {
-      this.clueService.update(this.treasure.id!, movedClue.id, movedClue).subscribe({
+      const payload = {
+        step: event.currentIndex + 1,
+        text: movedClue.text,
+        solution: movedClue.solution
+      };
+
+      this.clueService.update(this.treasure.id!, movedClue.id, payload).subscribe({
         next: (updatedTreasure: TreasureHunt) => {
-          console.log(updatedTreasure);
           this.treasureUpdate.emit(updatedTreasure);
         },
         error: (err) => console.error('Errore reorder clue', err),
       });
     }
   }
+
 
   protected deleteTreasure(treasure: TreasureHunt) {
     if (!confirm(`Sei sicuro di voler cancellare la caccia "${treasure.theme}"?`)) {

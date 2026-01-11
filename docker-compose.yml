@@ -1,0 +1,8 @@
+
+services:
+  frontend:
+    build: .
+    container_name: frontend-treasure
+    ports:
+      - "4200:80"
+

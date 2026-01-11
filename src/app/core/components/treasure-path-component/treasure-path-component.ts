@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef,ViewChild} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -21,6 +22,8 @@ export class TreasurePathComponent implements AfterViewInit {
   private svg!: SVGSVGElement;
   private pathLength!: number;
   private readonly RESET_PROGRESS = 0.5;
+
+  constructor(private router:Router) {}
 
   ngAfterViewInit() {
     this.boat = this.boatRef.nativeElement;
@@ -45,48 +48,52 @@ export class TreasurePathComponent implements AfterViewInit {
   private setupDrag(): void {
     let isDragging = false;
 
-    const onMouseMove = (e: MouseEvent) => {
+    const onPointerMove = (e: PointerEvent) => {
       if (!isDragging) return;
 
       const svgRect = this.svg.getBoundingClientRect();
       const boatBBox = this.boat.getBBox();
 
-      let mouseX = e.clientX - svgRect.left;
+      let clientX = e.clientX;
+      let mouseX = clientX - svgRect.left;
       mouseX = Math.max(0, Math.min(mouseX, svgRect.width));
 
       let progress = mouseX / svgRect.width;
-
-      // Compensa larghezza barca
       const boatOffset = boatBBox.width / svgRect.width;
       progress = Math.min(progress, 1 - boatOffset);
 
       this.updateBoatPosition(progress);
 
-      // Raggiunta fine → emetti evento
       if (progress >= 1 - boatOffset) {
         isDragging = false;
-        this.updateBoatPosition(this.RESET_PROGRESS); // reset a metà
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
+        this.boat.releasePointerCapture(e.pointerId);
+        this.onTreasureReached();
       }
     };
 
-    const onMouseUp = () => {
+    const onPointerUp = (e: PointerEvent) => {
       isDragging = false;
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
+      this.boat.releasePointerCapture(e.pointerId);
     };
 
-    this.boat.addEventListener('mousedown', (e) => {
+    this.boat.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       isDragging = true;
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('mouseup', onMouseUp);
+      this.boat.setPointerCapture(e.pointerId);
     });
+
+    this.boat.addEventListener('pointermove', onPointerMove);
+    this.boat.addEventListener('pointerup', onPointerUp);
+    this.boat.addEventListener('pointercancel', onPointerUp);
   }
 
   private updateBoatPosition(progress: number): void {
     const point = this.path.getPointAtLength(this.pathLength * progress);
     this.setBoatPosition(point.x, point.y);
   }
+
+  private onTreasureReached() {
+    this.router.navigate(['/treasure-scroll']);
+  }
+
 }
