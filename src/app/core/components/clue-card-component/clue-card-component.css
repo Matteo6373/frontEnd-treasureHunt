@@ -1,0 +1,114 @@
+.clue-flip-container {
+  position: relative;
+  width: 100%;
+  perspective: 1200px;
+  display: grid;
+  cursor: default;
+}
+
+.clue-face {
+  grid-area: 1 / 1;
+  position: relative;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(.4,.2,.2,1);
+}
+
+.clue-front { transform: rotateY(0deg); }
+.clue-back  { transform: rotateY(180deg); }
+
+.clue-flip-container.flipped .clue-front {
+  transform: rotateY(-180deg);
+}
+
+.clue-flip-container.flipped .clue-back {
+  transform: rotateY(0deg);
+}
+
+.clue-glass {
+  height: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  cursor: default;
+  background: linear-gradient(135deg, #ffe48a, #f5c96b);
+  border: 1px solid #d4a93d;
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(255,255,255,0.4);
+  color: #3b2a00;
+  font-weight: 500;
+}
+
+.solution-glass {
+  height: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  cursor: default;
+  background: linear-gradient(135deg, #5a4408, #8c6a10);
+  border: 1px solid #ffcc33;
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.6),
+    inset 0 0 0 1px rgba(255,215,0,0.3);
+  color: #fff3c0;
+}
+
+.clue-front .clue-label {
+  color: #7a4b00;
+  font-weight: 700;
+}
+
+.clue-actions {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: .25s;
+}
+
+.clue-flip-container:hover .clue-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.clue-btn {
+  border: none;
+  background: rgba(0,0,0,0.4);
+  color: white;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: .2s;
+}
+
+.clue-btn:hover {
+  background: rgba(0,0,0,0.7);
+  transform: scale(1.1);
+}
+
+.clue-btn.delete:hover {
+  background: rgba(180,0,0,0.8);
+}
+
+.clue-editor {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: text;
+  background: linear-gradient(135deg, #fff1b8, #f3cc73);
+  border: 1px solid #caa03d;
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,0.15),
+    0 4px 10px rgba(0,0,0,0.2);
+  color: #3b2a00;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: none;
+  outline: none;
+  transition: 0.2s ease;
+}

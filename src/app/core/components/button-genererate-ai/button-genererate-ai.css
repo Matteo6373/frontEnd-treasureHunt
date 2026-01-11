@@ -1,0 +1,13 @@
+.number-picker {
+  bottom: 100%;
+  left: 0;
+  pointer-events: none;
+}
+
+.number-picker span {
+  pointer-events: auto;
+}
+.generate-btn {
+  touch-action: none;
+  user-select: none;
+}

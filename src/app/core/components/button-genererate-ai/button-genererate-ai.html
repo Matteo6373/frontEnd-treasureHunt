@@ -1,0 +1,33 @@
+<div class="position-relative d-inline-block"
+     (mouseup)="showNumberPicker.set(false)">
+
+  @if (showNumberPicker()) {
+    <div
+      class="number-picker position-absolute d-flex gap-1 p-2 bg-dark bg-opacity-75 rounded"
+      style="bottom:100%; left:0;"
+    >
+      @for (n of [1,2,3,4,5]; track n) {
+        <span
+          (mouseenter)="hoverNumber.set(n)"
+          (mouseup)="pickNumber(n)"
+          [class.bg-success]="hoverNumber() === n"
+          class="badge rounded-circle bg-white text-dark p-2 cursor-pointer"
+          style="width:30px;height:30px;text-align:center; pointer-events:auto;"
+        >
+          {{ n }}
+        </span>
+      }
+    </div>
+  }
+
+  <button
+    class="btn btn-sm btn-success"
+    (mousedown)="startHold($event)"
+    (mouseup)="endHold()"
+    (click)="generate.emit({ treasure: treasure, count: 1 })"
+    style="cursor:pointer;"
+  >
+    Genera Indizi AI
+  </button>
+
+</div>

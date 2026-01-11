@@ -1,0 +1,29 @@
+.scroll-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1b2a3a, #02040a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.parchment {
+  width: 80%;
+  max-width: 700px;
+  padding: 3rem;
+  background: linear-gradient(#fdf1c1, #f5d98c);
+  border-radius: 12px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.7);
+  font-family: "Cinzel", serif;
+  animation: unfurl 1.2s ease-out;
+}
+
+@keyframes unfurl {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}

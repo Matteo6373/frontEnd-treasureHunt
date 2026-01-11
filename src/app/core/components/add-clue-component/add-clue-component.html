@@ -1,0 +1,31 @@
+<form class="d-flex gap-2" (ngSubmit)="submit()" autocomplete="off">
+
+  <input
+    type="text"
+    [(ngModel)]="clueText"
+    name="clueText"
+    class="form-control form-control-sm"
+    placeholder="Indizio..."
+    required
+    (keydown.enter)="focusSolution()"
+  />
+
+  <input
+    #solutionInput
+    type="text"
+    [(ngModel)]="solution"
+    name="solution"
+    class="form-control form-control-sm"
+    placeholder="Soluzione..."
+    required
+  />
+
+  <button
+    class="btn btn-sm btn-success"
+    type="submit"
+    [disabled]="!clueText.trim() || !solution.trim()"
+  >
+    +
+  </button>
+
+</form>

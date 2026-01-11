@@ -1,0 +1,53 @@
+<div
+  class="clue-flip-container"
+  [class.flipped]="clue.showSolution"
+  (click)="clue.showSolution = !clue.showSolution"
+>
+
+  <!-- FRONTE (INDIZIO) -->
+  <div class="clue-face clue-front">
+    <div class="clue-glass">
+      <div class="clue-actions">
+        <button class="clue-btn edit" (click)="editClue(); $event.stopPropagation()">✏️</button>
+        <button class="clue-btn delete" (click)="deleteClue(); $event.stopPropagation()">🗑️</button>
+      </div>
+      <span class="clue-label">Indizio</span>
+      @if(!clue.editingText){
+        <p>{{ clue.text }}</p>
+      } @else {
+        <textarea
+          id="clue-textarea-{{clue.id}}"
+          class="clue-editor"
+          [(ngModel)]="clue.text"
+          (click)="$event.stopPropagation()"
+          (blur)="saveClue(); clue.editingText = false; document.body.style.overflow='auto';"
+          (keydown.enter)="saveClue(); $event.preventDefault(); clue.editingText = false; document.body.style.overflow='auto';"
+        ></textarea>
+      }
+    </div>
+  </div>
+
+  <!-- RETRO (SOLUZIONE) -->
+  <div class="clue-face clue-back">
+    <div class="solution-glass">
+      <div class="clue-actions">
+        <button class="clue-btn edit" (click)="editClue(); $event.stopPropagation()">✏️</button>
+        <button class="clue-btn delete" (click)="deleteClue(); $event.stopPropagation()">🗑️</button>
+      </div>
+      <span class="clue-label text-warning">Soluzione</span>
+      @if (!clue.editingSolution){
+        <p>{{ clue.solution }}</p>
+      } @else {
+        <textarea
+          id="clue-solution-{{clue.id}}"
+          class="clue-editor"
+          [(ngModel)]="clue.solution"
+          (click)="$event.stopPropagation()"
+          (blur)="saveClue(); clue.editingSolution = false; document.body.style.overflow='auto';"
+          (keydown.enter)="saveClue(); $event.preventDefault(); document.body.style.overflow='auto'; clue.editingSolution = false;"
+        ></textarea>
+      }
+    </div>
+  </div>
+</div>
+
