@@ -1,59 +1,91 @@
-# FrontEndTreasureHunt
+# 🏴‍☠️ Treasure Hunt – Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+Questo repository contiene il **frontend Angular** dell’applicazione Treasure Hunt.
 
-## Development server
+Il frontend comunica con il backend Spring Boot tramite API REST esposte su:
 
-To start a local development server, run:
-
-```bash
-ng serve
+```
+http://localhost:8080/api
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Il frontend e il backend vengono eseguiti in **Docker Compose separati** e comunicano tramite `localhost`.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 📦 Backend (prerequisito)
 
-```bash
-ng generate component component-name
+Prima di avviare il frontend è necessario avviare il backend.
+
+Repository backend:
+
+```
+https://github.com/Matteo6373/treasureHunt
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Il backend sarà disponibile su:
 
-```bash
-ng generate --help
+```
+http://localhost:8080
 ```
 
-## Building
+---
 
-To build the project run:
+## ▶️ Avvio del frontend
 
-```bash
-ng build
+Repository frontend:
+
+```
+https://github.com/Matteo6373/frontEnd-treasureHunt
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Clona ed esegui il frontend:
 
 ```bash
-ng test
+git clone https://github.com/Matteo6373/frontEnd-treasureHunt
+cd frontEnd-treasureHunt
+docker compose up -d --build
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 🌐 Accesso all'applicazione
 
-```bash
-ng e2e
+Una volta avviato, il frontend sarà disponibile su:
+
+```
+http://localhost:4200
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Il frontend comunicherà con il backend tramite:
 
-## Additional Resources
+```
+http://localhost:8080/api
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## 🐳 Architettura
+
+```
+Browser
+   |
+   |  http://localhost:4200
+   v
+Angular Frontend (Docker)
+   |
+   |  http://localhost:8080/api
+   v
+Spring Boot Backend (Docker)
+   |
+   v
+Database / AI / Services
+```
+
+I due progetti **non condividono la stessa rete Docker**: la comunicazione avviene tramite le porte esposte su `localhost`.
+
+---
+
+## 🛠️ Requisiti
+
+- Docker
+- Docker Compose
